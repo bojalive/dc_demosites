@@ -142,7 +142,31 @@ function AppInner() {
   const [showNotif, setShowNotif] = useState(false);
   const collapsed = !sidebarHovered;
 
-  useEffect(() => { document.title = `${config.brand.shortName} · Quality NC Portal`; }, []);
+  useEffect(() => {
+    document.title = `${config.brand.shortName} · Quality NC Portal`;
+    // Generate favicon from brand initials + color
+    const canvas = document.createElement("canvas");
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext("2d");
+    const r = 14;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(64 - r, 0);
+    ctx.quadraticCurveTo(64, 0, 64, r);
+    ctx.lineTo(64, 64 - r); ctx.quadraticCurveTo(64, 64, 64 - r, 64);
+    ctx.lineTo(r, 64); ctx.quadraticCurveTo(0, 64, 0, 64 - r);
+    ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.fillStyle = config.brand.primaryColor;
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 26px 'Montserrat', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(config.brand.initials, 32, 33);
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) { link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+    link.href = canvas.toDataURL("image/png");
+  }, []);
 
   const now = new Date();
   const time = now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
