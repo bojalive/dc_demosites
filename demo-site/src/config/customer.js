@@ -1,0 +1,92 @@
+export const config = {
+  company: {
+    name: 'Acme Manufacturing Ltd',
+    shortName: 'Acme',
+    initials: 'AM',
+    tagline: 'Engineering Excellence Since 1980',
+    accentColor: '#0891b2',
+    accentGradient: 'linear-gradient(135deg, #0891b2, #0e7490)',
+    established: 1980,
+    employees: '1,200+',
+    plants: 3,
+    location: 'Coimbatore, India',
+  },
+  dashboard: {
+    title: 'Acme Manufacturing Command Center',
+    subtitle: 'Operations Dashboard',
+    kpis: [
+      { label: 'Units Produced', value: '12,450', sub: 'This month', icon: 'factory', change: '+8% vs last month', changeType: 'up' },
+      { label: 'Quality Pass Rate', value: '98.4%', sub: 'Across all lines', icon: 'verified', change: '+0.3% this week', changeType: 'up' },
+      { label: 'Active Orders', value: 284, sub: 'In production pipeline', icon: 'assignment', change: '+12 today', changeType: 'up' },
+      { label: 'On-Time Delivery', value: '94.2%', sub: 'Last 30 days', icon: 'local_shipping', change: '-1.1% vs target', changeType: 'dn' },
+    ],
+    chartData: [
+      { month: 'Jan', units: 9800, target: 10000 },
+      { month: 'Feb', units: 10200, target: 10000 },
+      { month: 'Mar', units: 11100, target: 10500 },
+      { month: 'Apr', units: 10800, target: 10500 },
+      { month: 'May', units: 11600, target: 11000 },
+      { month: 'Jun', units: 12450, target: 11000 },
+    ],
+    modules: [
+      { name: 'Production', health: 88, color: '#0891b2' },
+      { name: 'Quality', health: 95, color: '#059669' },
+      { name: 'Supply Chain', health: 76, color: '#7c3aed' },
+      { name: 'Maintenance', health: 82, color: '#d97706' },
+    ],
+  },
+  nav: [
+    { id: 'dashboard', name: 'Dashboard', icon: 'dashboard', path: '/' },
+    { id: 'products', name: 'Products', icon: 'inventory_2', path: '/products' },
+    { id: 'features', name: 'Features', icon: 'star', path: '/features' },
+    { id: 'contact', name: 'Contact Us', icon: 'mail', path: '/contact' },
+  ],
+  products: [
+    {
+      id: 'p1', name: 'Product Line A', icon: 'precision_manufacturing', color: '#0891b2',
+      description: 'High-performance components engineered for automotive-grade reliability.',
+      tags: ['Automotive', 'OEM'],
+    },
+    {
+      id: 'p2', name: 'Product Line B', icon: 'memory', color: '#059669',
+      description: 'Precision-turned parts meeting aerospace tolerances.',
+      tags: ['Aerospace', 'Precision'],
+    },
+    {
+      id: 'p3', name: 'Product Line C', icon: 'electric_bolt', color: '#7c3aed',
+      description: 'Electrical and electronic assemblies for industrial applications.',
+      tags: ['Industrial', 'Electrical'],
+    },
+    {
+      id: 'p4', name: 'Product Line D', icon: 'handyman', color: '#d97706',
+      description: 'Braking and safety system components for commercial vehicles.',
+      tags: ['Safety', 'Commercial'],
+    },
+    {
+      id: 'p5', name: 'Product Line E', icon: 'sensors', color: '#dc2626',
+      description: 'Advanced sensor and detection systems for OEM integration.',
+      tags: ['Sensors', 'OEM'],
+    },
+    {
+      id: 'p6', name: 'Engineering Services', icon: 'engineering', color: '#0e7490',
+      description: 'End-to-end precision engineering and prototyping services.',
+      tags: ['Services', 'R&D'],
+    },
+  ],
+  features: [
+    { icon: 'verified', title: 'ISO Certified Quality', description: 'ISO 9001 and ISO 14001 certified processes ensuring world-class quality at every step.' },
+    { icon: 'public', title: 'Global Reach', description: 'Supplying to OEMs and Tier-1 customers across automotive, aerospace, and industrial sectors worldwide.' },
+    { icon: 'precision_manufacturing', title: 'Precision Engineering', description: 'Sub-micron tolerances with NABL-accredited metrology labs for critical applications.' },
+    { icon: 'recycling', title: 'Sustainable Manufacturing', description: 'Environmentally responsible processes with zero-waste targets and energy efficiency programs.' },
+    { icon: 'groups', title: 'Experienced Team', description: 'Over 1,000 skilled engineers and technicians with decades of domain expertise.' },
+    { icon: 'speed', title: 'Fast Turnaround', description: 'Agile production planning with rapid prototyping and accelerated time-to-market.' },
+  ],
+  contact: {
+    heading: 'Partner with Acme',
+    subheading: 'Let\'s build something exceptional together. Reach out to explore how we can support your manufacturing needs.',
+    email: 'info@acmemfg.com',
+    phone: '+91 422 000 0000',
+    address: 'Acme Industrial Park, Coimbatore - 641 001, Tamil Nadu, India',
+    ctaLabel: 'Request a Demo',
+  },
+};
