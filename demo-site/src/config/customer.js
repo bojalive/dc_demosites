@@ -1,4 +1,17 @@
 export const config = {
+  brand: {
+    shortName: 'RML',
+    initials: 'RM',
+    plantName: 'Roots Multiclean - Coimbatore',
+    plantCode: 'RML-CBE',
+    portalName: 'QUALITY SUITE',
+    suiteLabel: 'Productivity Suite',
+    primaryColor: '#059669',
+    primaryDark: '#047857',
+    primaryLight: '#6ee7b7',
+    address: 'Roots Multiclean Ltd., Coimbatore, Tamil Nadu 641018',
+    productionType: 'Industrial Cleaning Equipment',
+  },
   company: {
     name: 'Roots Multiclean Ltd',
     shortName: 'Roots Multiclean',
