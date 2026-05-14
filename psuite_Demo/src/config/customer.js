@@ -1,4 +1,17 @@
 export const config = {
+  brand: {
+    shortName: 'ERC',
+    initials: 'ER',
+    plantName: 'Elgi Rubber - Coimbatore',
+    plantCode: 'ERC-CBE',
+    portalName: 'QUALITY SUITE',
+    suiteLabel: 'Productivity Suite',
+    primaryColor: '#7c3aed',
+    primaryDark: '#6d28d9',
+    primaryLight: '#c4b5fd',
+    address: 'Elgi Rubber Co. Ltd., Coimbatore, Tamil Nadu 641006',
+    productionType: 'Automotive Rubber Components',
+  },
   company: {
     name: 'Elgi Rubber Company Limited',
     shortName: 'Elgi Rubber',
