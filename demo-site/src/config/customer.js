@@ -1,4 +1,17 @@
 export const config = {
+  brand: {
+    shortName: 'KPR',
+    initials: 'KM',
+    plantName: 'KPR Mill - Coimbatore',
+    plantCode: 'KPR-CBE',
+    portalName: 'QUALITY SUITE',
+    suiteLabel: 'Productivity Suite',
+    primaryColor: '#0891b2',
+    primaryDark: '#0670a2',
+    primaryLight: '#67e8f9',
+    address: 'KPR Mill Ltd., Coimbatore, Tamil Nadu 641687',
+    productionType: 'Textile Yarn Manufacturing',
+  },
   company: {
     name: 'KPR Mill Limited',
     shortName: 'KPR Mill',
