@@ -15,10 +15,28 @@ jobs:
         run: |
           SLUG="${GITHUB_REF_NAME#deploys-}"
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
-      - name: Create QSuite project
-        continue-on-error: true
+      - name: Ensure QSuite project exists
         run: |
-          curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects" -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json" -d "{\"name\":\"${{ steps.slug.outputs.slug }}-qsuite\",\"production_branch\":\"main\"}"
+          SLUG="${{ steps.slug.outputs.slug }}"
+          PROJ="${SLUG}-qsuite"
+          GET=$(curl -s "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJ}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          SUCCESS=$(echo "$GET" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+          if [ "$SUCCESS" = "True" ]; then
+            echo "Project $PROJ already exists"
+          else
+            echo "Creating project $PROJ..."
+            CREATE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects" \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "{\"name\":\"${PROJ}\",\"production_branch\":\"main\"}")
+            C_SUCCESS=$(echo "$CREATE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+            echo "Create result: $C_SUCCESS"
+            echo "Response: $CREATE"
+            if [ "$C_SUCCESS" != "True" ]; then
+              echo "WARN: Could not create project — it may already exist or token may lack permissions"
+            fi
+          fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -27,15 +45,64 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - name: Create PSuite project
-        continue-on-error: true
+      - name: Ensure PSuite project exists
         run: |
-          curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects" -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json" -d "{\"name\":\"${{ steps.slug.outputs.slug }}-psuite\",\"production_branch\":\"main\"}"
+          SLUG="${{ steps.slug.outputs.slug }}"
+          PROJ="${SLUG}-psuite"
+          GET=$(curl -s "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJ}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          SUCCESS=$(echo "$GET" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+          if [ "$SUCCESS" = "True" ]; then
+            echo "Project $PROJ already exists"
+          else
+            echo "Creating project $PROJ..."
+            CREATE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects" \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "{\"name\":\"${PROJ}\",\"production_branch\":\"main\"}")
+            C_SUCCESS=$(echo "$CREATE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+            echo "Create result: $C_SUCCESS"
+            echo "Response: $CREATE"
+            if [ "$C_SUCCESS" != "True" ]; then
+              echo "WARN: Could not create project — it may already exist or token may lack permissions"
+            fi
+          fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - name: Deploy PSuite
         run: npx wrangler@latest pages deploy dist-psuite --project-name "${{ steps.slug.outputs.slug }}-psuite" --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Ensure NerveCenter project exists
+        if: hashFiles('dist-nervecenter/index.html') != ''
+        run: |
+          SLUG="${{ steps.slug.outputs.slug }}"
+          PROJ="${SLUG}-nervecenter"
+          GET=$(curl -s "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PROJ}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          SUCCESS=$(echo "$GET" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+          if [ "$SUCCESS" = "True" ]; then
+            echo "Project $PROJ already exists"
+          else
+            echo "Creating project $PROJ..."
+            CREATE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects" \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d "{\"name\":\"${PROJ}\",\"production_branch\":\"main\"}")
+            C_SUCCESS=$(echo "$CREATE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('success','false'))" 2>/dev/null)
+            echo "Create result: $C_SUCCESS"
+            if [ "$C_SUCCESS" != "True" ]; then
+              echo "WARN: Could not create project — it may already exist or token may lack permissions"
+            fi
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy NerveCenter
+        if: hashFiles('dist-nervecenter/index.html') != ''
+        run: npx wrangler@latest pages deploy dist-nervecenter --project-name "${{ steps.slug.outputs.slug }}-nervecenter" --branch main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
