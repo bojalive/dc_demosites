@@ -1,0 +1,37 @@
+name: Deploy to Cloudflare Pages
+on:
+  push:
+    branches:
+      - 'deploys-*'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - id: slug
+        run: |
+          SLUG="${GITHUB_REF_NAME#deploys-}"
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+      - name: Create QSuite project
+        run: npx wrangler@latest pages project create "${{ steps.slug.outputs.slug }}-qsuite" --production-branch main 2>/dev/null || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy QSuite
+        run: npx wrangler@latest pages deploy dist-qsuite --project-name "${{ steps.slug.outputs.slug }}-qsuite" --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Create PSuite project
+        run: npx wrangler@latest pages project create "${{ steps.slug.outputs.slug }}-psuite" --production-branch main 2>/dev/null || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy PSuite
+        run: npx wrangler@latest pages deploy dist-psuite --project-name "${{ steps.slug.outputs.slug }}-psuite" --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
